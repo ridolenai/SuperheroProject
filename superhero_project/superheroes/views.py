@@ -32,8 +32,8 @@ def create(request):
         new_hero = Superhero(name = name, alter_ego = alter_ego, primary_ability = primary, secondary_ability = secondary, catch_phrase = catchphrase)
         new_hero.save()
         return HttpResponseRedirect(reverse('superheroes:index'))
-
-
-
     else:
         return render(request, 'superheroes/create.html')
+
+def update(request, hero_id):
+    pass
