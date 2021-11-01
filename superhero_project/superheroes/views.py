@@ -1,3 +1,4 @@
+from django.http.response import HttpResponsePermanentRedirect
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -36,4 +37,25 @@ def create(request):
         return render(request, 'superheroes/create.html')
 
 def update(request, hero_id):
-    pass
+    single_hero = Superhero.objects.get(pk = hero_id)
+    if request.method == 'Post':
+        update_name = request.POST.get('name')
+        update_alter_ego = request.POST.get('alter_ego')
+        update_primary = request.POST.get('primary')
+        update_secondary = request.POST.get('secondary')
+        update_catchphrase = request.POST.get('catcphrase')
+        updated_hero = Superhero(name = update_name, alter_ego = update_alter_ego, primary_ability = update_primary, secondary_ability = update_secondary, catch_phrase = update_catchphrase)
+        updated_hero.save()
+        Superhero.delete(single_hero)
+        return HttpResponseRedirect(reverse('superheroes:index'))
+    else:
+        return HttpResponseRedirect(reverse('superheroes/update.html'))
+
+
+def delete(request, hero_id):
+    archnemesis = Superhero.objects.get(pk = hero_id)
+    if request.method == 'Post':
+        Superhero.delete(archnemesis)
+        return HttpResponseRedirect(reverse('superheroes:index'))
+    else:
+        return HttpResponseRedirect(reverse('superheroes/delete.html'))
